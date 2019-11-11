@@ -279,7 +279,7 @@ ArduinoOTA
 
   timeClient.begin();
   geolocation(); // guess where I am
-  getWeather(); //because we want weather, and dont need to update or lat/lon or timezone each loop.
+  //getWeather(); //because we want weather, and dont need to update or lat/lon or timezone each loop.
   timeClient.setTimeOffset(gmtOffset_sec);
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
