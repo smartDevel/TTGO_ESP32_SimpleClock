@@ -497,7 +497,7 @@ String dateString = dayArray[weekday()] + " " + monthArray[month()] + " " + day(
 
 bool loadConfig() {
   //File configFile = SPIFFS.open("/config.json", "r");
-  File configFile = SPIFFS.open("../data/config.json", "r");
+  File configFile = SPIFFS.open("../.data/config.json", "r");
   if (!configFile) {
     Serial.println("Failed to open config file");
     return false;

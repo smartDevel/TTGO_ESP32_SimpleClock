@@ -4,4 +4,4 @@
 .vscode/launch.json
 .vscode/ipch
 .mySecrets
-data/config.json
+.data
