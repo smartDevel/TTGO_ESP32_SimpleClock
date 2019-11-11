@@ -40,7 +40,7 @@ see https://www.thingiverse.com/thing:3777859/comments for more info.
 #include <WiFi.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-#include "../lib/TimeLib.h"
+#include <TimeLib.h>
 #include <PubSubClient.h>
 #include <SPI.h>
 #include <ESPmDNS.h>
@@ -54,7 +54,7 @@ see https://www.thingiverse.com/thing:3777859/comments for more info.
 //#define TTGO_TS_144 1 
 
 //Define your temperature units Default will be Celsius
-#define Fahrenheit //comment out for Celsius
+//#define Fahrenheit //comment out for Celsius
 
 //Define 24 hour time (default) or 12 hour time
 //#define HOUR12 //comment out for 24 hour time
