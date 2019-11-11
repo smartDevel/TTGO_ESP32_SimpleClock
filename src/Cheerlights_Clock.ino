@@ -47,6 +47,7 @@ see https://www.thingiverse.com/thing:3777859/comments for more info.
 #include <ArduinoOTA.h>
 #include "FS.h"
 #include "SPIFFS.h"
+#include "../.mySecrets/secrets.h"
 
 //Define your board type default to TTGO_T_Display
 //#define TTGO_T2 1
@@ -107,11 +108,15 @@ see https://www.thingiverse.com/thing:3777859/comments for more info.
 #endif
 
 // Replace with your network credentials
-const char* ssid     = "";
-const char* password = "";
-const char* mqtt_server = "simplesi.cloud";
+//const char* ssid     = "";
+const char* ssid     = myssid;
+//const char* password = "";
+const char* password = mypassword;
+//const char* mqtt_server = "simplesi.cloud";
+const char* mqtt_server = my_mqtt_server;
 // openweathermap.org key
-String WEATHERKEY;
+//String WEATHERKEY;
+String WEATHERKEY = myWeatherkey;
 
 // temp in celcius
 double temperature = 0.0;
@@ -491,7 +496,8 @@ String dateString = dayArray[weekday()] + " " + monthArray[month()] + " " + day(
 }
 
 bool loadConfig() {
-  File configFile = SPIFFS.open("/config.json", "r");
+  //File configFile = SPIFFS.open("/config.json", "r");
+  File configFile = SPIFFS.open("../data/config.json", "r");
   if (!configFile) {
     Serial.println("Failed to open config file");
     return false;
