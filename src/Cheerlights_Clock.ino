@@ -112,8 +112,8 @@ see https://www.thingiverse.com/thing:3777859/comments for more info.
 const char* ssid     = myssid;
 //const char* password = "";
 const char* password = mypassword;
-//const char* mqtt_server = "simplesi.cloud";
-const char* mqtt_server = my_mqtt_server;
+const char* mqtt_server = "simplesi.cloud";
+//const char* mqtt_server = my_mqtt_server;
 // openweathermap.org key
 //String WEATHERKEY;
 String WEATHERKEY = myWeatherkey;
@@ -205,6 +205,29 @@ void reconnect() {
   }
 }
 
+void getWeather() { 
+ String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + String(lat) + "&lon=" + String(lon) + "&appid=" + WEATHERKEY;
+  Serial.println(url);
+  getJson(url);
+  const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
+  DynamicJsonDocument jsonBuffer(1024);
+  DeserializationError error = deserializeJson (jsonBuffer, payload);
+  error = deserializeJson (jsonBuffer, payload);
+  if (error){
+      Serial.println ("deserializeJson () failed");
+  }
+  gmtOffset_sec = jsonBuffer["timezone"]; //maybe causing a problem on new calls (?) may only need this one time (?)
+  temperature = jsonBuffer["main"]["temp"];
+  temperature = temperature - 273.0;
+  //JsonObject obj = jsonBuffer.as<JsonObject>();
+  
+  weatherStatement = jsonBuffer["weather"][0]["description"].as<String>();
+  weatherStatement += "                    ";
+  Serial.println(temperature);
+  Serial.println(weatherStatement);
+}
+
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin (115200);
@@ -217,7 +240,7 @@ void setup() {
   }
   if (!SPIFFS.begin()) {
     Serial.println("Failed to mount file system");
-    return;
+    //return;  zunächst auskommentiert wegen Reboot-Schleife, muss geprüft werden !!
   }
   if (!loadConfig()) {
     Serial.println("Failed to load config");
@@ -284,7 +307,7 @@ ArduinoOTA
 
   timeClient.begin();
   geolocation(); // guess where I am
-  //getWeather(); //because we want weather, and dont need to update or lat/lon or timezone each loop.
+  getWeather(); //because we want weather, and dont need to update or lat/lon or timezone each loop.
   timeClient.setTimeOffset(gmtOffset_sec);
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
@@ -337,28 +360,7 @@ int geolocation(){
   lon = jsonBuffer["lon"];
 }
 
- void getWeather() { 
- String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + String(lat) + "&lon=" + String(lon) + "&appid=" + WEATHERKEY;
-  Serial.println(url);
-  getJson(url);
-  const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
-  DynamicJsonDocument jsonBuffer(1024);
-  DeserializationError error = deserializeJson (jsonBuffer, payload);
-  error = deserializeJson (jsonBuffer, payload);
-  if (error){
-      Serial.println ("deserializeJson () failed");
-  }
-  gmtOffset_sec = jsonBuffer["timezone"]; //maybe causing a problem on new calls (?) may only need this one time (?)
-  temperature = jsonBuffer["main"]["temp"];
-  temperature = temperature - 273.0;
-  //JsonObject obj = jsonBuffer.as<JsonObject>();
-  
-  weatherStatement = jsonBuffer["weather"][0]["description"].as<String>();
-  weatherStatement += "                    ";
-  Serial.println(temperature);
-  Serial.println(weatherStatement);
-}
-
+ 
 void updateNTP (void *pvParameters) {
   (void) pvParameters;
 
@@ -472,7 +474,7 @@ String dateString = dayArray[weekday()] + " " + monthArray[month()] + " " + day(
       tft.print(out);
 #else      
       tft.setTextColor(0x39C4, TFT_BLACK);
-     
+     //tft.setTextColor(0x39C4, TFT_CYAN);
       //tft.drawString("88:88:88",10,10,7);
       
       tft.setTextColor(rgb565Decimal, TFT_BLACK);
@@ -496,8 +498,8 @@ String dateString = dayArray[weekday()] + " " + monthArray[month()] + " " + day(
 }
 
 bool loadConfig() {
-  //File configFile = SPIFFS.open("/config.json", "r");
-  File configFile = SPIFFS.open("../.data/config.json", "r");
+  File configFile = SPIFFS.open("/config.json", "r");
+  //File configFile = SPIFFS.open("../.data/config.json", "r");
   if (!configFile) {
     Serial.println("Failed to open config file");
     return false;
