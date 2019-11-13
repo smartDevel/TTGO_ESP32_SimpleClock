@@ -230,7 +230,7 @@ void reconnect()
 
 void getWeather()
 {
-  String url = "http://api.openweathermap.org/data/2.5/weather?lat=" + String(lat) + "&lon=" + String(lon) + "&appid=" + WEATHERKEY;
+  String url = "http://api.openweathermap.org/data/2.5/weather?lang=de&lat=" + String(lat) + "&lon=" + String(lon) + "&appid=" + WEATHERKEY;
   #ifdef DEBUG_MODE
   Serial.println(url);
   #endif
@@ -488,9 +488,9 @@ void updateScreen(void *pvParameters)
       sprintf(out, "%2.0f`C", temperature);
 #endif
 
-      String dayArray[9] = {"", "Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"};
-      String monthArray[14] = {"", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-      String dateString = dayArray[weekday()] + " " + monthArray[month()] + " " + day() + ", " + year() + " ";
+      String dayArray[9] = {"", "Son", "Mon", "Die", "Mit", "Don", "Fri", "Sam"};
+      String monthArray[14] = {"", "Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"};
+      String dateString = dayArray[weekday()] + " " +  day() + ". " + monthArray[month()] + ". " + year() + " ";
       //Serial.print("Date: "); Serial.print(dayArray[weekday()]); Serial.print(" "); Serial.print(monthArray[month()]); Serial.print(" ");Serial.print(day()); Serial.print(", "); Serial.println(year());
 
 #ifdef TTGO_T2
