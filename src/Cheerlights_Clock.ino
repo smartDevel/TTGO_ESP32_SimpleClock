@@ -47,9 +47,13 @@ see https://www.thingiverse.com/thing:3777859/comments for more info.
 #include <ArduinoOTA.h>
 #include "FS.h"
 #include "SPIFFS.h"
+
+//secrets.h file to store credentials for network and mqtt
 #include "../.mySecrets/secrets.h"
 
-#define DEBUG_MODE 1
+
+// uncomment to give out debug messages on serial monitor 
+//#define DEBUG_MODE 1
 
 //Define your board type default to TTGO_T_Display
 //#define TTGO_T2 1
